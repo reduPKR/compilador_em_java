@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <HBox prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: #4c4c4c;" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btn_Compilar" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 30;" text="Compilar">
+               <HBox.margin>
+                  <Insets left="20.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="btn_Limpar" layoutX="30.0" layoutY="20.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 30;" text="Limpar ">
+               <HBox.margin>
+                  <Insets left="20.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+         </children></HBox>
+   </top>
+   <center>
+      <VBox style="-fx-background-color: #151515;" BorderPane.alignment="CENTER">
+         <children>
+            <Separator prefHeight="7.0" style="-fx-background-color: #808080;" />
+            <VBox style="-fx-background-color: #000000;">
+               <children>
+                  <TextArea fx:id="ta_Codigo" opacity="0.46" prefHeight="530.0" prefWidth="986.0" />
+                  <Separator prefHeight="7.0" style="-fx-background-color: #808080;" />
+               </children>
+            </VBox>
+            <TextArea fx:id="ta_Mensagens" editable="false" opacity="0.46" prefHeight="200.0" prefWidth="986.0" />
+         </children>
+      </VBox>
+   </center>
+   <bottom>
+      <Separator prefHeight="7.0" style="-fx-background-color: #808080;" BorderPane.alignment="CENTER" />
+   </bottom>
+   <left>
+      <Separator orientation="VERTICAL" prefWidth="7.0" style="-fx-background-color: #808080;" BorderPane.alignment="CENTER" />
+   </left>
+   <right>
+      <Separator orientation="VERTICAL" prefWidth="7.0" style="-fx-background-color: #808080;" BorderPane.alignment="CENTER" />
+   </right>
+</BorderPane>
