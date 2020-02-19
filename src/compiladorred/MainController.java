@@ -43,6 +43,7 @@ public class MainController implements Initializable {
     {
         code.setPrefSize(986, 530);
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
+        code.opacityProperty().set(0.5);
         return code;
     }
 }
