@@ -8,7 +8,11 @@ and open the template in the editor.
     Author     : REDUA
 */
 
+.code-area{
+    -fx-background-color: #4F4F4F;
+}
+
 .keyword{
-    -fx-fill:#3c6fc3;
+    -fx-fill:#8B0000;
     -fx-font-weight: bold;
 }
