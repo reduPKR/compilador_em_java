@@ -9,9 +9,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-
 import org.fxmisc.richtext.CodeArea;
+
+//import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import utils.CodeAreaClass;
 
 /**
  *
@@ -30,20 +32,14 @@ public class MainController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Tab();
+        iniciarCodeArea();
     }    
     
-    public void Tab()
+    public void iniciarCodeArea()
     {        
         CodeArea code = new CodeArea();
-        a_pane.getChildren().add(iniciarCodeArea(code));
-    }
-    
-    public CodeArea iniciarCodeArea(CodeArea code)
-    {
-        code.setPrefSize(986, 530);
-        code.setParagraphGraphicFactory(LineNumberFactory.get(code));
-        code.opacityProperty().set(0.5);
-        return code;
+        code = CodeAreaClass.IniciarCodeArea(code);
+   
+        a_pane.getChildren().add(code);
     }
 }
