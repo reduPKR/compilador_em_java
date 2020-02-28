@@ -9,10 +9,50 @@ and open the template in the editor.
 */
 
 .code-area{
-    -fx-background-color: #4F4F4F;
+    -fx-background-color: #363636;
 }
 
-.keyword{
+.programa{
+   -fx-fill:#32CD32;
+   -fx-font-weight: bold; 
+}
+
+.tipo{
     -fx-fill:#8B0000;
+    -fx-font-weight: bold;
+}
+
+.bloco{
+    -fx-fill: #00008B;
+    -fx-font-weight: bold;
+}
+
+.limite{
+    -fx-fill: #f0f0f0;
+    -fx-font-weight: bold;
+}
+
+.atribuicao{
+    -fx-fill: #6A5ACD;
+    -fx-font-weight: bold;
+}
+                
+.aritmetico{
+    -fx-fill: #00FF7F;
+    -fx-font-weight: bold;
+}
+
+.compracao{
+    -fx-fill: #4682B4;
+    -fx-font-weight: bold;
+}
+
+.logico{
+    -fx-fill: #FF8C00;
+    -fx-font-weight: bold;
+}
+
+.letra{
+    -fx-fill: #FFFFFF;
     -fx-font-weight: bold;
 }
