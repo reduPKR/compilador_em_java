@@ -56,3 +56,23 @@ and open the template in the editor.
     -fx-fill: #FFFFFF;
     -fx-font-weight: bold;
 }
+
+.numero{
+    -fx-fill: #20B2AA;
+    -fx-font-weight: bold;
+}
+
+.fim_linha{
+    -fx-fill: #FF4500;
+    -fx-font-weight: bold;
+}
+
+.string{
+    -fx-fill: #FFD700;
+    -fx-font-weight: bold;
+}
+
+.comentario{
+    -fx-fill: #006400;
+    -fx-font-weight: bold;
+}
