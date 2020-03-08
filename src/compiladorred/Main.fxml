@@ -3,13 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="compiladorred.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1220.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="compiladorred.MainController">
    <top>
       <HBox prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: #4c4c4c;" BorderPane.alignment="CENTER">
          <children>
@@ -33,7 +35,8 @@
    <center>
       <VBox style="-fx-background-color: #151515;" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="a_pane" prefHeight="540.0" prefWidth="986.0" />
+            <Separator layoutX="10.0" layoutY="550.0" prefHeight="7.0" style="-fx-background-color: #808080;" />
+            <AnchorPane fx:id="a_pane" prefHeight="540.0" />
             <Separator prefHeight="7.0" style="-fx-background-color: #808080;" />
             <VBox style="-fx-background-color: #000000;">
                <children>
@@ -41,16 +44,26 @@
                </children>
             </VBox>
             <TextArea fx:id="ta_Mensagens" editable="false" opacity="0.4" prefHeight="200.0" prefWidth="986.0" />
+            <Separator prefHeight="7.0" style="-fx-background-color: #808080;" />
+            <Separator layoutX="10.0" layoutY="764.0" prefHeight="7.0" style="-fx-background-color: #808080;" />
          </children>
       </VBox>
    </center>
-   <bottom>
-      <Separator prefHeight="7.0" style="-fx-background-color: #808080;" BorderPane.alignment="CENTER" />
-   </bottom>
-   <left>
-      <Separator orientation="VERTICAL" prefWidth="7.0" style="-fx-background-color: #808080;" BorderPane.alignment="CENTER" />
-   </left>
    <right>
       <Separator orientation="VERTICAL" prefWidth="7.0" style="-fx-background-color: #808080;" BorderPane.alignment="CENTER" />
    </right>
+   <left>
+      <HBox prefHeight="100.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <children>
+            <Separator layoutX="204.0" layoutY="10.0" orientation="VERTICAL" prefWidth="7.0" style="-fx-background-color: #808080;" />
+            <TableView fx:id="tabela" prefHeight="200.0" prefWidth="388.0">
+              <columns>
+                <TableColumn fx:id="tc_cadeia" prefWidth="193.0" resizable="false" sortable="false" text="Cadeia" />
+                <TableColumn fx:id="tc_token" prefWidth="193.0" resizable="false" sortable="false" text="Token" />
+              </columns>
+            </TableView>
+            <Separator orientation="VERTICAL" prefWidth="7.0" style="-fx-background-color: #808080;" />
+         </children>
+      </HBox>
+   </left>
 </BorderPane>

@@ -24,3 +24,4 @@ dist/CompiladorRED.jnlp
 dist/CompiladorRED.jar
 dist/CompiladorRED.html
 build/built-jar.properties
+/dist/

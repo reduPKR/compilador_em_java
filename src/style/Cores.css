@@ -28,7 +28,7 @@ and open the template in the editor.
 }
 
 .limite{
-    -fx-fill: #f0f0f0;
+    -fx-fill: #87CEFA;
     -fx-font-weight: bold;
 }
 
@@ -75,4 +75,10 @@ and open the template in the editor.
 .comentario{
     -fx-fill: #006400;
     -fx-font-weight: bold;
+}
+
+.outro{
+    -fx-fill: #FF0000;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
 }
