@@ -135,84 +135,125 @@ public class AnaliseSintatica {
         erro = new ArrayList(); 
         MatrizSintatica ms = new MatrizSintatica();
 
-        if(!lista.get(i).getToken().equals("tk_prog_ini"))
+        if(!lista.get(i).getToken().contains("tk_prog_ini"))
             erro.add(new Log("Erro sintatico", " tk_prog_ini (<?) não encontrado", "Erro",lista.get(0).getLinha()+1,lista.get(0).getColuna()+1));
         else
             i++;
         
-        LerLinha(i, ms);
+        Boolean chave = LerLinha(i, false, ms);
         
-        if(!lista.get(lista.size()-2).getToken().equals("tk_prog_fim"))
+        if(chave)
+            erro.add(new Log("Erro sintatico", " tk_fecha_chav (}) a mais encontrado ","Erro",lista.get(lista.size()-3).getLinha()+1,1));
+        
+        if(!lista.get(lista.size()-2).getToken().contains("tk_prog_fim"))
             erro.add(new Log("Erro sintatico", " tk_prog_fim (?>) não encontrado","Erro",lista.get(lista.size()-2).getLinha()+1,lista.get(lista.size()-2).getColuna()+1));
             
     }
     
-    private static void LerLinha(int i, MatrizSintatica ms){
-        int j, k;
+    private static Boolean LerLinha(int i, Boolean bloco, MatrizSintatica ms){
+        int j, k, next;
         String cadeia, aux, atual;
         ArrayList<String> ant;
-        Boolean flag;
+        ArrayList <Log> logChave = null;
+        Boolean flag, flgChave;
         Log l = null;
         Pilha p;
         
         k = 0;
-        for(; i < lista.size() && !lista.get(i).getToken().equals("tk_prog_fim"); i++) {
+        flgChave = false;
+        for(; i < lista.size() && !lista.get(i).getToken().equals("tk_prog_fim") && !flgChave; i++) {
             if(!lista.get(i).getCadeia().equals("\n")){
                 cadeia = lista.get(i).getToken();
-                ant = ms.getRotas(cadeia);//Retorna todos anteriores que levam diretamente a cadeia
+                ant = ms.getRotas(cadeia, true);//Retorna todos anteriores que levam diretamente a cadeia
                 
                 flag = false;
-                for(j = 0; j < ant.size() && !flag; j++){
+                for(j = 0; j < ant.size() && !flag && !flgChave; j++){
                     k = i;
                     
                     atual = ant.get(j);
                     p = Povoar(cadeia, ms);
 
                     aux = p.Pop();
-                    if(aux.contains(cadeia)){
-                        k++;
-                        while(k < lista.size() && !lista.get(k).getCadeia().equals("\n")){
-                            cadeia = lista.get(k).getToken();
-                            if(p.getTopo() != null){
-                                aux = p.Pop();
-                                
-                                if(!aux.contains(cadeia)){
-                                    if(!aux.equals("$"))
-                                        l = new Log("Erro sintatico", " sintaxe incorreta do "+atual+" token esperado "+aux+" token usado "+cadeia,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1); 
-                                    else
-                                        l = new Log("Erro sintatico", " sintaxe incorreta do "+atual,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1); 
-
-                                    k = lista.size();
-                                } 
-                            }else{
-                                l = new Log("Erro sintatico", " sintaxe incorreta do "+atual,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1);
-                                k = lista.size();
-                            }
-
+                    if(aux.contains("tk_fecha_chav") && bloco){
+                        flgChave = true;            
+                    }else{
+                        if(aux.contains(cadeia)){
                             k++;
-                        }
-                        
-                        if(k < lista.size()){
-                            aux = p.Pop();
-                            if(lista.get(k).getCadeia().equals("\n") && (aux.contains("$") || aux.contains("tk_abre_chav")) && !cadeia.contains("tk_prog_fim")){
-                                l = new Log("Analise sintatica", " sintaxe "+atual+" reconhecida","Log",lista.get(k).getLinha()+1,1);
-                                flag = true;
-                            }
-                            
-                            /*Inicia bloco*/
-                            if(aux.contains("tk_abre_chav")){
-                                LerBloco(p, k, ms); 
-                            }
-                        }
+                            while(k < lista.size() && !lista.get(k).getCadeia().equals("\n")){
+                                cadeia = lista.get(k).getToken();
+                                if(p.getTopo() != null){
+                                    aux = p.Pop();
+                                    if(aux.contains("tk_fecha_chav") && bloco){
+                                        flgChave = true;                        
+                                    }else{
+                                        if(!aux.contains(cadeia)){
+                                            if(!aux.equals("$"))
+                                                l = new Log("Erro sintatico", " sintaxe incorreta do "+atual+" token esperado "+aux+" token usado "+cadeia,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1); 
+                                            else
+                                                l = new Log("Erro sintatico", " sintaxe incorreta do "+atual,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1); 
 
-                    }else
-                        l = new Log("Erro sintatico", " sintaxe inicial incorreta"+aux,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1);
+                                            k = lista.size();
+                                        }   
+                                    }
+                                }else{
+                                    l = new Log("Erro sintatico", " sintaxe incorreta do "+atual,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1);
+                                    k = lista.size();
+                                }
+
+                                k++;
+                            }
+
+                            if(!flgChave){
+                                if(p.getTopo() != null){
+                                    aux = p.Pop();
+                                }
+
+                                if(k < lista.size()){
+                                    if(lista.get(k).getCadeia().equals("\n") && (aux.contains("$") || aux.contains("tk_abre_chav")) && !cadeia.contains("tk_prog_fim")){
+                                        l = new Log("Analise sintatica", " sintaxe "+atual+" reconhecida","Log",lista.get(k).getLinha()+1,1);
+                                        flag = true;
+                                    }
+                                }
+
+                                /*Inicia bloco*/
+                                if(aux.contains("tk_abre_chav")){
+                                    k++;
+                                    /*Remove caso nao fosse o anterior*/
+                                    logChave = new ArrayList();
+                                        
+                                    if(lista.get(k).getToken().contains("tk_abre_chav")){                                        
+                                        logChave.add(new Log("Analise sintatica", " tk_abre_chav ({) reconhecida","Log",lista.get(k).getLinha()+1,1));
+                                        next = LerBloco(k+1, ms);
+                                        if(next > 0){
+                                            logChave.add(new Log("Analise sintatica", " tk_fecha_chav (}) reconhecida","Log",lista.get(next).getLinha(),1));
+                                            k = next + 1;
+                                        }else{
+                                            logChave.add(new Log("Erro sintatico", " tk_fecha_chav (}) não encontrado","Erro",lista.get(next).getLinha(),1));
+                                        }
+                                    }else
+                                        logChave.add(new Log("Erro sintatico", " tk_abre_chav ({) não encontrado apos o "+atual,"Erro",lista.get(k).getLinha()+1,1));
+                                        
+                                }
+                            }
+                        }else
+                            l = new Log("Erro sintatico", " sintaxe inicial incorreta"+aux,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1);
+                    }
                 }
                 i = k;
             }  
-            if(l != null)
+            if(l != null){
                 erro.add(l);
+                l = null;
+                
+                if(logChave != null){
+                    for(Log item : logChave)
+                        erro.add(item);
+                    
+                    logChave = null;
+                }
+            }
         }
+        return flgChave;
     }
     
     private static Pilha Povoar(String cadeia, MatrizSintatica ms){
@@ -300,7 +341,16 @@ public class AnaliseSintatica {
         return str;
     }
     
-    private static void LerBloco(Pilha p, int i, MatrizSintatica ms){
+    private static int LerBloco(int i, MatrizSintatica ms){       
+        i++;
+        if(!lista.get(i).getToken().contains("tk_fecha_chav")){
+            if(LerLinha(i, true, ms)){
+                while(!lista.get(i).getToken().contains("tk_fecha_chav"))
+                    i++;
+            }else
+                return -1;
+        }
         
+        return i;
     }
 }

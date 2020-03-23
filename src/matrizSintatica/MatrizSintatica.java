@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class MatrizSintatica {
     private ArrayList<No> regra = new ArrayList();
+    private ArrayList<No> original = new ArrayList();
 
     public MatrizSintatica() {
         int i;
@@ -28,15 +29,31 @@ public class MatrizSintatica {
                             no.setProx(cod[i]);
                         }
                     }
-                    regra.add(no);
+                    original.add(no);
                 }
                 
                 linha = lerArq.readLine(); 
             }
             arq.close();
+            
+            IniciarRegra();
         } catch (IOException e) {
             e.getMessage();
         }   
+    }
+    
+    private void IniciarRegra(){
+        regra = new ArrayList();
+        No no;
+        
+        for (No item : original) {
+            no = new No(item.getAnt());
+            for (int i = 0; i < item.getProx().size(); i++) {
+                no.setProx(item.getProx(i));
+            }
+            
+            regra.add(no);
+        }
     }
     
     public String getAnterior(String cadeia){
@@ -50,7 +67,7 @@ public class MatrizSintatica {
         return ret;
     }
     
-    public ArrayList<String> getRotas(String cadeia){
+    public ArrayList<String> getRotas(String cadeia, Boolean flag){
         ArrayList <String> ret = new ArrayList();
         
         for (int i = 0; i < regra.size(); i++) {
@@ -58,11 +75,16 @@ public class MatrizSintatica {
                 if(!regra.get(i).getAnt().equals("variavel"))
                     ret.add(regra.get(i).getAnt());
                 else{
-                    ret.addAll(getRotas(regra.get(i).getAnt()));
+                    ret.addAll(getRotas(regra.get(i).getAnt(),false));
                 }
             }
         }
         
+        if(ret.size() == 0 && flag){
+            IniciarRegra();
+            ret = getRotas(cadeia,false);
+        }
+         
         return ret;
     }
     
@@ -74,7 +96,8 @@ public class MatrizSintatica {
             if(regra.get(i).getAnt().equals(cadeia))
                 ret = regra.get(i).getProx();
         }
-        
         return ret;
     }
+    
+    /*Algumas funcoes podem modificar as regras para tokens por isso o original mantem as regras e as salva*/
 }

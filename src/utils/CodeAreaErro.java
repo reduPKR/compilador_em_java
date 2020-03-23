@@ -24,7 +24,7 @@ public class CodeAreaErro {
             "|(?<SINTATICO>Erro sintatico)" + 
             "|(?<SUCESSO>Analise sintatica)" +
             "|(?<INFO>Linha:|Coluna:|Erro:|Log:)" +
-            "|(?<LETRA>[a-zA-Z_()?<>ãÃ]+)" +
+            "|(?<LETRA>[a-zA-Z_(){}?<>ãÃ]+)" +
             "|(?<NUMERO>[0-9]+)"
     );
     
