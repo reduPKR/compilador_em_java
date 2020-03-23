@@ -12,7 +12,10 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 public class CodeAreaClass {
+    private static int width = 813;
+    private static int height = 538;    
     private static ArrayList <String> codigo;
+    private static String codOrig;
     
     private static final String[] TIPOS = new String[]{"int", "double", "string", "bool"};
     private static final String[] BLOCOS = new String[]{"if", "else", "while", "loop"};
@@ -50,7 +53,7 @@ public class CodeAreaClass {
     public static CodeArea IniciarCodeArea(CodeArea ca){
         CodeArea code = ca;
         
-        code.setPrefSize(820, 540);
+        code.setPrefSize(width, height);
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         
         code.textProperty().addListener((obs, oldText, newText) -> 
@@ -132,7 +135,7 @@ public class CodeAreaClass {
     public static CodeArea ExemploCodigo(CodeArea ca){
         CodeArea code = ca;
         
-        code.setPrefSize(820, 540);
+        code.setPrefSize(width, height);
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         
         String exemplo = "<?\n"
@@ -171,9 +174,11 @@ public class CodeAreaClass {
         return code;
     }
     
+    
     private static void setCode(String texto){
         texto = texto.replaceAll("\t", " ");
         
+        codOrig = texto;
         String[] items = texto.split("\n");
         codigo = new ArrayList<String>();
         
@@ -184,5 +189,19 @@ public class CodeAreaClass {
     
     public static ArrayList getCode(){
         return codigo;
+    }
+    
+    public static void setErro(CodeArea ca, int linha){
+        linha--;
+        ArrayList<String> e = new ArrayList();
+        e.add("erro");
+        ca.setParagraphStyle(linha,e);
+    }
+    
+     public static void LimparErros(CodeArea ca, int linha){
+        linha--;
+        ArrayList<String> e = new ArrayList();
+        e.add("erroCorrigido");
+        ca.setParagraphStyle(linha,e);
     }
 }

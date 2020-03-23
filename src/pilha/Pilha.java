@@ -6,6 +6,10 @@ public class Pilha {
     public Pilha() {
         topo = null;
     }
+
+    public No getTopo() {
+        return topo;
+    }
     
     public void Push(String info){
         if(topo == null)

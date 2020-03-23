@@ -1,0 +1,36 @@
+programa tk_prog_ini tipo bloco tk_prog_fim
+
+tipo tipo_int tipo_double tipo_string tipo_bool
+tipo_int tk_tipo_int variavel oper_atribuicao tk_num_int fim_linha
+tipo_double tk_tipo_double variavel oper_atribuicao tk_num_double fim_linha
+tipo_string tk_tipo_string variavel oper_atribuicao tk_string fim_linha
+tipo_bool tk_tipo_bool variavel oper_atribuicao tk_num_int fim_linha
+
+bloco bloco_if bloco_while bloco_loop expressao
+bloco_if tk_bloco_if abre_parenteses boolean fecha_parenteses abre_chaves bloco fecha_chaves bloco_else
+bloco_else tk_bloco_else abre_chaves bloco fecha_chaves
+bloco_else tk_bloco_else bloco_if
+bloco_while tk_bloco_while abre_parenteses boolean fecha_parenteses abre_chaves bloco fecha_chaves
+bloco_loop tk_bloco_loop abre_parenteses caracter fecha_parenteses abre_chaves bloco fecha_chaves
+
+expressao variavel oper_atribuicao caracter oper_aritmetico caracter fim_linha
+
+boolean var_bool comparacao comp_logica
+comparacao caracter oper_comparacao caracter
+comp_logica boolean oper_logico boolean
+
+oper_atribuicao tk_oper_atrib
+oper_aritmetico tk_oper_soma tk_oper_sub tk_oper_div tk_oper_mult tk_oper_pot
+oper_comparacao tk_comp_igual tk_comp_dif tk_comp_mai tk_comp_men tk_comp_mai_igual tk_comp_men_igual
+oper_logico tk_logico_and tk_logico_or
+
+caracter var_bool variavel numero 
+variavel tk_variavel  
+numero tk_num_int tk_num_double
+var_bool tk_num_int 
+
+abre_parenteses tk_abre_par
+fecha_parenteses tk_fecha_par
+abre_chaves tk_abre_chav
+fecha_chaves tk_fecha_chav
+fim_linha tk_fim_lin

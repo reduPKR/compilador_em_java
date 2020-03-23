@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -33,18 +32,17 @@
          </children></HBox>
    </top>
    <center>
-      <VBox style="-fx-background-color: #151515;" BorderPane.alignment="CENTER">
+      <VBox BorderPane.alignment="CENTER">
          <children>
             <Separator layoutX="10.0" layoutY="550.0" prefHeight="7.0" style="-fx-background-color: #808080;" />
-            <AnchorPane fx:id="a_pane" prefHeight="540.0" />
+            <AnchorPane fx:id="a_pane_cod" prefHeight="540.0" />
             <Separator prefHeight="7.0" style="-fx-background-color: #808080;" />
-            <VBox style="-fx-background-color: #000000;">
+            <VBox fx:id="a_pane_erro" style="-fx-background-color: #000000;">
                <children>
                   <Separator prefHeight="7.0" style="-fx-background-color: #808080;" />
                </children>
             </VBox>
-            <TextArea fx:id="ta_Mensagens" editable="false" opacity="0.4" prefHeight="200.0" prefWidth="986.0" />
-            <Separator prefHeight="7.0" style="-fx-background-color: #808080;" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
             <Separator layoutX="10.0" layoutY="764.0" prefHeight="7.0" style="-fx-background-color: #808080;" />
          </children>
       </VBox>
