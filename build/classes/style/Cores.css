@@ -1,0 +1,117 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 26/02/2020, 23:04:50
+    Author     : REDUA
+*/
+
+.code-area{
+    -fx-background-color: #363636;
+}
+
+.programa{
+   -fx-fill:#32CD32;
+   -fx-font-weight: bold; 
+}
+
+.tipo{
+    -fx-fill:#a52a2a;
+    -fx-font-weight: bold;
+}
+
+.bloco{
+    -fx-fill: #1e90ff;
+    -fx-font-weight: bold;
+}
+
+.limite{
+    -fx-fill: #87CEFA;
+    -fx-font-weight: bold;
+}
+
+.atribuicao{
+    -fx-fill: #6A5ACD;
+    -fx-font-weight: bold;
+}
+                
+.aritmetico{
+    -fx-fill: #00FF7F;
+    -fx-font-weight: bold;
+}
+
+.compracao{
+    -fx-fill: #4682B4;
+    -fx-font-weight: bold;
+}
+
+.logico{
+    -fx-fill: #FF8C00;
+    -fx-font-weight: bold;
+}
+
+.letra{
+    -fx-fill: #3cb371;
+    -fx-font-weight: bold;
+}
+
+.numero{
+    -fx-fill: #20B2AA;
+    -fx-font-weight: bold;
+}
+
+.fim_linha{
+    -fx-fill: #FF4500;
+    -fx-font-weight: bold;
+}
+
+.string{
+    -fx-fill: #FFD700;
+    -fx-font-weight: bold;
+}
+
+.comentario{
+    -fx-fill: #006400;
+    -fx-font-weight: bold;
+}
+
+.outro{
+    -fx-fill: #FF0000;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+}
+
+.sintatico{
+    -fx-fill: #B22222;
+    -fx-font-weight: bold;
+}
+
+.seta{
+    -fx-fill: #A9A9A9;
+    -fx-font-weight: bold;
+}
+
+.info{
+    -fx-fill: #00BFFF;
+    -fx-font-weight: bold;
+}
+
+.erroletra{
+    -fx-fill: #FF4500;
+    -fx-font-weight: bold;
+}
+
+.erronumero{
+    -fx-fill: #FFA500;
+    -fx-font-weight: bold;
+}
+
+.erro{
+    -fx-border-color: #FF0000;
+}
+
+.erroCorrigido{
+   -fx-border-color: #363636;
+}
