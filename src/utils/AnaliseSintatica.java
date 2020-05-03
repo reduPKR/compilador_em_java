@@ -137,31 +137,37 @@ public class AnaliseSintatica {
 
         if(!lista.get(i).getToken().contains("tk_prog_ini"))
             erro.add(new Log("Erro sintatico", " tk_prog_ini (<?) não encontrado", "Erro",lista.get(0).getLinha()+1,lista.get(0).getColuna()+1));
-        else
+        else{
+            erro.add(new Log("Analise sintatica", " sintaxe tk_prog_ini (<?) reconhecida","Log",lista.get(0).getLinha()+1,1));
             i++;
+        }
         
         Boolean chave = LerLinha(i, false, ms);
         
         if(chave)
-            erro.add(new Log("Erro sintatico", " tk_fecha_chav (}) a mais encontrado ","Erro",lista.get(lista.size()-3).getLinha()+1,1));
+            erro.add(new Log("Erro sintatico", " tk_fecha_chav (}) a mais encontrado ","Erro",lista.get(lista.size()-2).getLinha()+1,1));
         
         if(!lista.get(lista.size()-2).getToken().contains("tk_prog_fim"))
             erro.add(new Log("Erro sintatico", " tk_prog_fim (?>) não encontrado","Erro",lista.get(lista.size()-2).getLinha()+1,lista.get(lista.size()-2).getColuna()+1));
-            
+        else
+            erro.add(new Log("Analise sintatica", " sintaxe tk_prog_fim (?>) reconhecida","Log",lista.get(lista.size()-2).getLinha()+1,lista.get(lista.size()-2).getColuna()+1));
     }
     
     private static Boolean LerLinha(int i, Boolean bloco, MatrizSintatica ms){
         int j, k, next;
         String cadeia, aux, atual;
         ArrayList<String> ant;
-        ArrayList <Log> logChave = null;
+        ArrayList <Log> logChave;
         Boolean flag, flgChave;
-        Log l = null;
+        Log l;
         Pilha p;
         
         k = 0;
         flgChave = false;
+        ms.IniciarRegra();
         for(; i < lista.size() && !lista.get(i).getToken().equals("tk_prog_fim") && !flgChave; i++) {
+            logChave = null;
+            l = null;
             if(!lista.get(i).getCadeia().equals("\n")){
                 cadeia = lista.get(i).getToken();
                 ant = ms.getRotas(cadeia, true);//Retorna todos anteriores que levam diretamente a cadeia
@@ -194,6 +200,19 @@ public class AnaliseSintatica {
 
                                             k = lista.size();
                                         }   
+                                        if(aux.contains("tk_comp")){
+                                            if(lista.get(k+1).getToken().contains("tk_comp")){
+                                                Pilha p2 = new Pilha();
+                                                p2.Push(lista.get(k).getToken());
+                                                p2.Push(lista.get(k+1).getToken());
+                                                p2.Push(lista.get(k+2).getToken());
+                                                
+                                                if(!TratarComparacao(p2, ms)){
+                                                    erro.add(new Log("Erro sintatico", " sintaxe de comparacao incorreta  ","Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1));
+                                                }
+                                                k+=2;
+                                           }                                            
+                                        }
                                     }
                                 }else{
                                     l = new Log("Erro sintatico", " sintaxe incorreta do "+atual,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1);
@@ -216,14 +235,25 @@ public class AnaliseSintatica {
                                 }
 
                                 /*Inicia bloco*/
-                                if(aux.contains("tk_abre_chav")){
-                                    k++;
+                                if(cadeia.contains("tk_abre_chav") || aux.contains("bloco")){
+                                    int ctr = -1;
                                     /*Remove caso nao fosse o anterior*/
                                     logChave = new ArrayList();
+                                    
+                                    if(lista.get(k-1).getToken().contains("tk_abre_chav"))
+                                        ctr = k-1;
+                                    else
+                                    if(lista.get(k).getToken().contains("tk_abre_chav"))
+                                        ctr = k;
+                                    
+                                    
+                                    /*Caso ja tenha atualizado*/
+                                    if(ctr != -1){                                            
+                                        logChave.add(new Log("Analise sintatica", " tk_abre_chav ({) reconhecida","Log",lista.get(ctr).getLinha()+1,1));
                                         
-                                    if(lista.get(k).getToken().contains("tk_abre_chav")){                                        
-                                        logChave.add(new Log("Analise sintatica", " tk_abre_chav ({) reconhecida","Log",lista.get(k).getLinha()+1,1));
-                                        next = LerBloco(k+1, ms);
+                                        if(lista.get(k).getCadeia().equals("\n"))
+                                            k++;
+                                        next = LerBloco(k, ms);
                                         if(next > 0){
                                             logChave.add(new Log("Analise sintatica", " tk_fecha_chav (}) reconhecida","Log",lista.get(next).getLinha(),1));
                                             k = next + 1;
@@ -231,7 +261,7 @@ public class AnaliseSintatica {
                                             logChave.add(new Log("Erro sintatico", " tk_fecha_chav (}) não encontrado","Erro",lista.get(next).getLinha(),1));
                                         }
                                     }else
-                                        logChave.add(new Log("Erro sintatico", " tk_abre_chav ({) não encontrado apos o "+atual,"Erro",lista.get(k).getLinha()+1,1));
+                                        logChave.add(new Log("Erro sintatico", " tk_abre_chav ({) não encontrado apos o "+atual,"Erro",lista.get(ctr).getLinha()+1,1));
                                         
                                 }
                             }
@@ -243,14 +273,10 @@ public class AnaliseSintatica {
             }  
             if(l != null){
                 erro.add(l);
-                l = null;
-                
-                if(logChave != null){
-                    for(Log item : logChave)
-                        erro.add(item);
-                    
-                    logChave = null;
-                }
+            }
+            if(logChave != null){
+                for(Log item : logChave)
+                    erro.add(item);
             }
         }
         return flgChave;
@@ -287,7 +313,8 @@ public class AnaliseSintatica {
                             }
                             linha.add(i, str);
                             i--;
-                        }else{
+                        }
+                        else{
                             str = linha.get(i);
                             linha.remove(i);
                             linha.add(i, CorrigirArquivo(str, ms));
@@ -295,7 +322,10 @@ public class AnaliseSintatica {
                         }                            
                     }
                 }
-                ant = ms.getAnterior(ant);
+                if(!cadeia.equals("oper_comparacao"))
+                    ant = ms.getAnterior(ant);
+                else
+                    ant = "programa";
             }
             
             p.Push("$");
@@ -342,7 +372,6 @@ public class AnaliseSintatica {
     }
     
     private static int LerBloco(int i, MatrizSintatica ms){       
-        i++;
         if(!lista.get(i).getToken().contains("tk_fecha_chav")){
             if(LerLinha(i, true, ms)){
                 while(!lista.get(i).getToken().contains("tk_fecha_chav"))
@@ -352,5 +381,21 @@ public class AnaliseSintatica {
         }
         
         return i;
+    }
+    
+    private static Boolean TratarComparacao(Pilha aux, MatrizSintatica ms){
+        Boolean flag = true;//false = erro
+        
+        Pilha p = Povoar("oper_comparacao", ms);
+        
+        while(flag && !p.getTopo().equals("$") && aux.getTopo() != null){
+            if(p.getTopo().getInfo().contains(aux.getTopo().getInfo())){
+                p.Pop();
+                aux.Pop();
+            }else
+                flag = false;
+        }
+        
+        return flag;
     }
 }
