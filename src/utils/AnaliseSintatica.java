@@ -228,14 +228,14 @@ public class AnaliseSintatica {
                                 }
 
                                 if(k < lista.size()){
-                                    if(lista.get(k).getCadeia().equals("\n") && (aux.contains("$") || aux.contains("tk_abre_chav")) && !cadeia.contains("tk_prog_fim")){
+                                    if(lista.get(k).getCadeia().equals("\n") && (aux.contains("$") || aux.contains("tk_abre_chav") || aux.contains("bloco")) && !cadeia.contains("tk_prog_fim")){
                                         l = new Log("Analise sintatica", " sintaxe "+atual+" reconhecida","Log",lista.get(k).getLinha()+1,1);
                                         flag = true;
                                     }
                                 }
 
                                 /*Inicia bloco*/
-                                if(cadeia.contains("tk_abre_chav") || aux.contains("bloco")){
+                                if(cadeia.contains("tk_abre_chav") || aux.contains("bloco")){//Verificar aqui ta dando erro nas chaves
                                     int ctr = -1;
                                     /*Remove caso nao fosse o anterior*/
                                     logChave = new ArrayList();
@@ -255,10 +255,10 @@ public class AnaliseSintatica {
                                             k++;
                                         next = LerBloco(k, ms);
                                         if(next > 0){
-                                            logChave.add(new Log("Analise sintatica", " tk_fecha_chav (}) reconhecida","Log",lista.get(next).getLinha(),1));
+                                            logChave.add(new Log("Analise sintatica", " tk_fecha_chav (}) reconhecida","Log",lista.get(next).getLinha()+1,1));
                                             k = next + 1;
                                         }else{
-                                            logChave.add(new Log("Erro sintatico", " tk_fecha_chav (}) não encontrado","Erro",lista.get(next).getLinha(),1));
+                                            logChave.add(new Log("Erro sintatico", " tk_fecha_chav (}) não encontrado","Erro",lista.get(next).getLinha()+1,1));
                                         }
                                     }else
                                         logChave.add(new Log("Erro sintatico", " tk_abre_chav ({) não encontrado apos o "+atual,"Erro",lista.get(ctr).getLinha()+1,1));
@@ -349,7 +349,7 @@ public class AnaliseSintatica {
         prox = ms.getLinha(linha);
         ArrayList<String> prox2;
         
-        if(linha.equals("comp_logica")){//Evita deadlock
+        if(linha.equals("comp_logica") && prox.size()> 1){//Evita deadlock
             prox.remove(0);
             prox.remove(1);
         }
