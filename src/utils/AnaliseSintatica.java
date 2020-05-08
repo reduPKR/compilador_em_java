@@ -76,7 +76,6 @@ public class AnaliseSintatica {
             UnirString();
             AnalisarPrograma();
         }
-        
     }
     
     private static Boolean Split(String letra){
@@ -235,7 +234,7 @@ public class AnaliseSintatica {
                                 }
 
                                 /*Inicia bloco*/
-                                if(cadeia.contains("tk_abre_chav") || aux.contains("bloco")){//Verificar aqui ta dando erro nas chaves
+                                if(cadeia.contains("tk_abre_chav") || aux.contains("tk_abre_chav")){
                                     int ctr = -1;
                                     /*Remove caso nao fosse o anterior*/
                                     logChave = new ArrayList();
@@ -261,7 +260,7 @@ public class AnaliseSintatica {
                                             logChave.add(new Log("Erro sintatico", " tk_fecha_chav (}) não encontrado","Erro",lista.get(next).getLinha()+1,1));
                                         }
                                     }else
-                                        logChave.add(new Log("Erro sintatico", " tk_abre_chav ({) não encontrado apos o "+atual,"Erro",lista.get(ctr).getLinha()+1,1));
+                                        logChave.add(new Log("Erro sintatico", " tk_abre_chav ({) não encontrado apos o "+atual,"Erro",lista.get(k).getLinha()+1,1));
                                         
                                 }
                             }
@@ -273,10 +272,11 @@ public class AnaliseSintatica {
             }  
             if(l != null){
                 erro.add(l);
-            }
-            if(logChave != null){
-                for(Log item : logChave)
-                    erro.add(item);
+                
+                if(logChave != null){
+                    for(Log item : logChave)
+                        erro.add(item);
+                }
             }
         }
         return flgChave;
