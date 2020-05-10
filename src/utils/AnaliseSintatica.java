@@ -233,13 +233,13 @@ public class AnaliseSintatica {
                                     aux = p.Pop();
                                 }
 
-//                                if(k < lista.size()){
-//                                    if(lista.get(k).getCadeia().equals("\n") && (aux.contains("$") || aux.contains("tk_abre_chav") || aux.contains("bloco")) && !cadeia.contains("tk_prog_fim")){
-//                                        l = new Log("Analise sintatica", " sintaxe "+atual+" reconhecida","Log",lista.get(k).getLinha()+1,1);
-//                                        ctrErro = false;
-//                                        flag = true;
-//                                    }
-//                                }
+                                if(k < lista.size()){
+                                    if(lista.get(k).getCadeia().equals("\n") && (aux.contains("$") || aux.contains("tk_abre_chav") || aux.contains("bloco")) && !cadeia.contains("tk_prog_fim")){
+                                        l = new Log("Analise sintatica", " sintaxe "+atual+" reconhecida","Log",lista.get(k).getLinha()+1,1);
+                                        ctrErro = false;
+                                        flag = true;
+                                    }
+                                }
 
                                 /*Inicia bloco*/
                                 if(cadeia.contains("tk_abre_chav") || aux.contains("tk_abre_chav")){
