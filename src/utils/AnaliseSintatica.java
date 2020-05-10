@@ -197,9 +197,9 @@ public class AnaliseSintatica {
                                             else
                                                 l = new Log("Erro sintatico", " sintaxe incorreta do "+atual,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1); 
 
-                                            k = lista.size();
+                                            //k = FimDaLinha(k, lista);
                                         }   
-                                        if(aux.contains("tk_comp")){
+                                        if(aux.contains("tk_comp") && k < lista.size() && !lista.get(k).getCadeia().equals("\n")){
                                             if(lista.get(k+1).getToken().contains("tk_comp")){
                                                 Pilha p2 = new Pilha();
                                                 p2.Push(lista.get(k).getToken());
@@ -215,7 +215,7 @@ public class AnaliseSintatica {
                                     }
                                 }else{
                                     l = new Log("Erro sintatico", " sintaxe incorreta do "+atual,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1);
-                                    k = lista.size();
+                                    //k = FimDaLinha(k, lista);
                                 }
 
                                 k++;
@@ -397,5 +397,10 @@ public class AnaliseSintatica {
         }
         
         return flag;
+    }
+    
+    private static int FimDaLinha(int i, ArrayList <Tokens> lista){
+        for(; i < lista.size() && !lista.get(i).getCadeia().equals("\n") ; i++);
+        return i;
     }
 }
