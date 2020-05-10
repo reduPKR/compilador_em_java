@@ -176,11 +176,11 @@ public class AnaliseSintatica {
                 ant = ms.getRotas(fixa, true);//Retorna todos anteriores que levam diretamente a cadeia
                 
                 ctrErro = flag = false;
-                for(j = 0; j < ant.size() && !flag && !flgChave; j++){
+                //for(j = 0; j < ant.size() && !flag && !flgChave; j++){
                     k = i;
                     
                     cadeia = fixa;
-                    atual = ant.get(j);
+                    //atual = ant.get(j);
                     p = Povoar(cadeia, ms);
                     
                     aux = p.Pop();
@@ -198,9 +198,9 @@ public class AnaliseSintatica {
                                     }else{
                                         if(!aux.contains(cadeia)){
                                             if(!aux.equals("$"))
-                                                l = new Log("Erro sintatico", " sintaxe incorreta do "+atual+" token esperado "+aux+" token usado "+cadeia,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1); 
+                                                l = new Log("Erro sintatico", " sintaxe incorreta do "+fixa+" token esperado "+aux+" token usado "+cadeia,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1); 
                                             else
-                                                l = new Log("Erro sintatico", " sintaxe incorreta do "+atual,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1); 
+                                                l = new Log("Erro sintatico", " sintaxe incorreta do "+fixa,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1); 
                                             ctrErro = true;
                                             //k = FimDaLinha(k, lista);
                                         }   
@@ -220,7 +220,7 @@ public class AnaliseSintatica {
                                         }
                                     }
                                 }else{
-                                    l = new Log("Erro sintatico", " sintaxe incorreta do "+atual,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1);
+                                    l = new Log("Erro sintatico", " sintaxe incorreta do "+fixa,"Erro",lista.get(k).getLinha()+1,lista.get(k).getColuna()+1);
                                     ctrErro = true;
                                     //k = FimDaLinha(k, lista);
                                 }
@@ -235,7 +235,7 @@ public class AnaliseSintatica {
 
                                 if(k < lista.size()){
                                     if(lista.get(k).getCadeia().equals("\n") && (aux.contains("$") || aux.contains("tk_abre_chav") || aux.contains("bloco")) && !cadeia.contains("tk_prog_fim")){
-                                        l = new Log("Analise sintatica", " sintaxe "+atual+" reconhecida","Log",lista.get(k).getLinha()+1,1);
+                                        l = new Log("Analise sintatica", " sintaxe "+fixa+" reconhecida","Log",lista.get(k).getLinha()+1,1);
                                         ctrErro = false;
                                         flag = true;
                                     }
@@ -268,7 +268,7 @@ public class AnaliseSintatica {
                                             logChave.add(new Log("Erro sintatico", " tk_fecha_chav (}) não encontrado","Erro",lista.get(next).getLinha()+1,1));
                                         }
                                     }else{
-                                        logChave.add(new Log("Erro sintatico", " tk_abre_chav ({) não encontrado apos o "+atual,"Erro",lista.get(k).getLinha()+1,1));
+                                        logChave.add(new Log("Erro sintatico", " tk_abre_chav ({) não encontrado apos o "+fixa,"Erro",lista.get(k).getLinha()+1,1));
                                     } 
                                 }
                             }
@@ -292,7 +292,7 @@ public class AnaliseSintatica {
                         }
                         j = ant.size();
                     }
-                }  
+               // }  
                 
                 i = k;
             }  
