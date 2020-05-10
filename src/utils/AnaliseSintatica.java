@@ -154,7 +154,7 @@ public class AnaliseSintatica {
     
     private static Boolean LerLinha(int i, Boolean bloco, MatrizSintatica ms){
         int j, k, next;
-        String cadeia, aux, atual;
+        String cadeia, fixa, aux, atual;
         ArrayList<String> ant;
         ArrayList <Log> logChave;
         Boolean flag, flgChave;
@@ -168,13 +168,14 @@ public class AnaliseSintatica {
             logChave = null;
             l = null;
             if(!lista.get(i).getCadeia().equals("\n")){
-                cadeia = lista.get(i).getToken();
-                ant = ms.getRotas(cadeia, true);//Retorna todos anteriores que levam diretamente a cadeia
+                fixa = lista.get(i).getToken();
+                ant = ms.getRotas(fixa, true);//Retorna todos anteriores que levam diretamente a cadeia
                 
                 flag = false;
                 for(j = 0; j < ant.size() && !flag && !flgChave; j++){
                     k = i;
                     
+                    cadeia = fixa;
                     atual = ant.get(j);
                     p = Povoar(cadeia, ms);
 
