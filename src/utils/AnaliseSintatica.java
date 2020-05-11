@@ -6,14 +6,13 @@ import javafx.collections.ObservableList;
 import matrizSintatica.MatrizSintatica;
 import model.Log;
 import model.Tokens;
-import model.Variaveis;
 import pilha.Pilha;
 
 public class AnaliseSintatica {
     private static ArrayList <String> codigo;
     private static ArrayList <Log> erro;
     private static ArrayList <Tokens> lista;
-    private static ArrayList <Variaveis> lista_variaveis;//Equivale a lista de tokens porem mantem apenas variaveis
+    private static ArrayList <Tokens> lista_variaveis;//Equivale a lista de tokens porem mantem apenas variaveis
 
     public static void setCodigo(ArrayList<String> codigo) {
         AnaliseSintatica.codigo = codigo;
@@ -283,12 +282,12 @@ public class AnaliseSintatica {
                             lista.get(i+1).setTipo(lista.get(i).getCadeia());
                             lista.get(i+1).setDado(lista.get(i+3).getCadeia());
 
-                            lista_variaveis.add(new Variaveis(lista.get(i+1).getCadeia(), lista.get(i+1).getToken(), lista.get(i+1).getTipo(), lista.get(i+1).getDado()));
+                            lista_variaveis.add(new Tokens(lista.get(i+1).getCadeia(), lista.get(i+1).getToken(), lista.get(i+1).getTipo(), lista.get(i+1).getDado(),lista.get(i+1).getLinha(),lista.get(i+1).getColuna()));
                         }else                    
                         if(fixa.contains("tk_variavel") && lista.get(i+1).getToken().contains("tk_oper_atrib")){
                             lista.get(i).setDado(lista.get(i+2).getCadeia());
 
-                            lista_variaveis.add(new Variaveis(lista.get(i).getCadeia(), lista.get(i).getToken(), null, lista.get(i).getDado()));
+                            lista_variaveis.add(new Tokens(lista.get(i).getCadeia(), lista.get(i).getToken(), null, lista.get(i).getDado(),lista.get(i+1).getLinha(),lista.get(i+1).getColuna()));
                         }
                         j = ant.size();
                     }
