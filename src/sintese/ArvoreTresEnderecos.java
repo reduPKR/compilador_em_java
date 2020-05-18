@@ -108,7 +108,7 @@ public class ArvoreTresEnderecos {
                     }
                 }
                 if(ctr){
-                    i--;
+                    i--;//Controla pra só sair quando tiver excluido todas operacoes desse tipo
                     ctr = false;
                 }
             }
