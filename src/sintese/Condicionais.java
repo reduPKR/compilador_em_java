@@ -156,6 +156,11 @@ public class Condicionais {
                         cod.add("WHILE: load r0, "+linha.get(0));//Carrega val no registrador t1
                     else
                         cod.add("WHILE: move r0, "+rv1);
+                    
+                    if(linha.get(1).equals(">")){
+                        cod.add("load ra, -1");
+                        cod.add("addi r0, r0, ra");
+                    }
                 }
 
                 if(r2 == -1){//Nenhum registrador
@@ -165,11 +170,6 @@ public class Condicionais {
                         cod.add("move "+temp[ctr++]+", "+rv2);
                     rv2 = temp[ctr-1];
                 }
-
-                if(linha.get(1).equals(">")){
-                    cod.add("load "+temp[ctr]+", -1");
-                    cod.add("addi r0, r0,"+temp[ctr]);
-               }
                 
                 if(linha.get(1).equals("==")){
                     cod.add("jmpEQ "+rv2+"=r0, BLOCO");
@@ -194,6 +194,11 @@ public class Condicionais {
                             cod.add("WHILE: load r0, "+linha.get(2));//Carrega val no registrador t1
                         else
                             cod.add("WHILE: move r0, "+rv1);
+                    
+                        if(linha.get(1).equals("<")){
+                            cod.add("load ra, -1");
+                            cod.add("addi r0, r0, ra");
+                        }
                     }
 
                     if(r2 == -1){//Nenhum registrador
@@ -203,11 +208,6 @@ public class Condicionais {
                             cod.add("move "+temp[ctr++]+", "+rv2);
                         }
                         rv2 = temp[ctr-1];
-                    }
-                    
-                    if(linha.get(1).equals("<")){
-                         cod.add("load "+temp[ctr]+", 1");
-                         cod.add("addi "+temp[ctr-1]+","+temp[ctr-1]+","+temp[ctr]);
                     }
                     
                     cod.add("jmpLE "+rv2+"<=r0, BLOCO");
