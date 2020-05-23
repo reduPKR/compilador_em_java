@@ -6,7 +6,7 @@ tipo_double tk_tipo_double variavel oper_atribuicao tk_num_double fim_linha
 tipo_string tk_tipo_string variavel oper_atribuicao tk_string fim_linha
 tipo_bool tk_tipo_bool variavel oper_atribuicao tk_num_int fim_linha
 
-bloco bloco_if bloco_while bloco_loop expressao
+bloco bloco_if bloco_while bloco_loop expressao atribuicao
 bloco_if tk_bloco_if abre_parenteses boolean fecha_parenteses abre_chaves bloco fecha_chaves bloco_else
 bloco_else tk_bloco_else abre_chaves bloco fecha_chaves
 bloco_else tk_bloco_else bloco_if
@@ -14,6 +14,7 @@ bloco_while tk_bloco_while abre_parenteses boolean fecha_parenteses abre_chaves 
 bloco_loop tk_bloco_loop abre_parenteses caracter fecha_parenteses abre_chaves bloco fecha_chaves
 
 expressao variavel oper_atribuicao caracter oper_aritmetico caracter fim_linha
+atribuicao variavel oper_atribuicao caracter fim_linha
 
 boolean var_bool comparacao comp_logica
 comparacao caracter oper_comparacao caracter

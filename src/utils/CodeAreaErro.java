@@ -12,8 +12,8 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 public class CodeAreaErro {
-    private static int width = 813;
-    private static int height = 406; 
+    private static int width = 801;
+    private static int height = 199; 
     private static ArrayList <Log> erro;
     
     
@@ -22,8 +22,9 @@ public class CodeAreaErro {
             "|(?<LINHA>\\-)" +
             "|(?<SETA>\\>|\\*)" +
             "|(?<SINTATICO>Erro sintatico)" + 
+            "|(?<WARNING>Alerta semantico)" + 
             "|(?<SUCESSO>Analise sintatica)" +
-            "|(?<INFO>Linha:|Coluna:|Erro:|Log:)" +
+            "|(?<INFO>Linha:|Coluna:|Erro:|Log:|Alerta:)" +
             "|(?<LETRA>[a-zA-Z_(){}?<>ãÃ]+)" +
             "|(?<NUMERO>[0-9]+)"
     );
@@ -38,6 +39,10 @@ public class CodeAreaErro {
     
     public static void SetLog(ArrayList<Log> erro){      
         CodeAreaErro.erro = erro;
+    }
+    
+    public static void SetLog(Log erro){      
+        CodeAreaErro.erro.add(erro);
     }
     
     public static ArrayList <Integer> getLinhas(){      
@@ -70,7 +75,10 @@ public class CodeAreaErro {
             String str = "";
             ca.editableProperty().set(true);        
             for (Log item : erro) {
-                str += "\n * "+item.getTipoLog()+" -> Linha: "+item.getLinha()+" Coluna: "+item.getColuna()+" "+item.getTipo()+": "+item.getLog();
+                if(!item.getTipoLog().equals("Erro de compilacao"))
+                    str += "\n * "+item.getTipoLog()+" -> Linha: "+item.getLinha()+" Coluna: "+item.getColuna()+" "+item.getTipo()+": "+item.getLog();
+                else
+                    str += "\n *** "+item.getTipoLog()+" -> "+item.getLog();
             }
             
             Head(ca, str);
@@ -99,9 +107,11 @@ public class CodeAreaErro {
         ArrayList <Integer> len1 = new ArrayList();
         ArrayList <Integer> len2 = new ArrayList();
         int a;
+        String styleClass;
         while (matcher.find()) 
         {
-            String styleClass = SelecionarClasse(matcher);
+            styleClass = SelecionarClasse(matcher);
+            
             if(styleClass.equals("erronumero"))
                 a = 5;
             if(styleClass.equals("seta") && flag ){
@@ -128,6 +138,7 @@ public class CodeAreaErro {
                matcher.group("LINHA") != null ? "aritmetico": 
                matcher.group("SETA") != null ? "seta": 
                matcher.group("SINTATICO") != null ? "sintatico":
+               matcher.group("WARNING") != null ? "warning":
                matcher.group("SUCESSO") != null ? "aritmetico": 
                matcher.group("INFO") != null ? "info":
                matcher.group("LETRA") != null ? "erroletra":

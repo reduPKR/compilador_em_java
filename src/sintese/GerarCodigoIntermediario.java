@@ -21,6 +21,8 @@ public class GerarCodigoIntermediario {
     }
     
     public void Gerar(){
+        /*Se chegou aqui tem o prog ini e fim evita perguntas na recursividade*/
+        RemoverEscopo();
         Registrador r = new Registrador();
         String salvar = Construir(tabela, r);
         geraArquivo(salvar);
@@ -36,8 +38,7 @@ public class GerarCodigoIntermediario {
         ArrayList<String> cod;
         String salvar = "";
         
-        /*Se chegou aqui tem o prog ini e fim*/
-        for(i = 2; i < tabela.size()-2; i++){
+        for(i = 0; i < tabela.size(); i++){
             if(tabela.get(i).getToken().equals("tk_oper_atrib")){
                 linha = new ArrayList();
                 
@@ -53,7 +54,7 @@ public class GerarCodigoIntermediario {
                 for(j = 0; j < cod.size(); j++)
                     salvar += cod.get(j)+'\n';
             }else
-            if(tabela.get(i).getToken().equals("tk_bloco_if")){
+            if(tabela.get(i).getToken().equals("tk_bloco_if") || tabela.get(i).getToken().equals("tk_bloco_while") || tabela.get(i).getToken().equals("tk_bloco_loop")){
                 linha = new ArrayList();
                 bloco = new ArrayList();
                 
@@ -61,16 +62,27 @@ public class GerarCodigoIntermediario {
                 for(; i < tabela.size() && !tabela.get(i).getToken().equals("tk_fecha_par"); i++){
                     linha.add(tabela.get(i).getCadeia());
                 }
-                i++;//pula {
-                for(; i < tabela.size() && !tabela.get(i).getToken().equals("tk_fecha_chav"); i++){
-                    bloco.add(new Tokens(tabela.get(i).getCadeia(),tabela.get(i).getToken() , 0, 0));
+                
+                while(tabela.get(i).getToken().equals("tk_fecha_par") || tabela.get(i).getToken().equals("tk_abre_chav") || tabela.get(i).getToken().equals("\n"))
+                    i++;
+                
+                for(; i < tabela.size() && !tabela.get(i).getToken().equals("tk_fim_lin"); i++){
+                    bloco.add(new Tokens(tabela.get(i).getCadeia(),tabela.get(i).getToken(), tabela.get(i).getTipo(), tabela.get(i).getDado() , 0, 0));
                 }                
                 
                 /*Bloco*/
                 aux = Converter(Construir(bloco, r));
                 
                 con.setR(r);
-                cod = con.ExcutarIf(linha, aux);
+                if(tabela.get(i).getToken().equals("tk_bloco_if"))
+                    cod = con.ExcutarIf(linha, aux);
+                else
+                if(tabela.get(i).getToken().equals("tk_bloco_while"))
+                    cod = con.ExcutarWhile(linha, aux);
+                else{
+                    //loop só aceita 1 dado seja variavel ou inteiro
+                    cod = con.ExcutarLoop(linha.get(0), aux);
+                }
                 r = con.getR();
                 
                 for(j = 0; j < cod.size(); j++)
@@ -104,4 +116,12 @@ public class GerarCodigoIntermediario {
         
         return aux;
     }    
+    
+    private void RemoverEscopo(){
+        while(tabela.get(0).getCadeia().equals("<?") || tabela.get(0).getCadeia().equals("\n"))
+            tabela.remove(0);
+        
+        while(tabela.get(tabela.size()-1).getCadeia().equals("?>") || tabela.get(tabela.size()-1).getCadeia().equals("\n"))
+            tabela.remove(tabela.size()-1);
+    }
 }

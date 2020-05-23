@@ -3,6 +3,8 @@ package model;
 public class Tokens {
     private String cadeia;
     private String token;
+    private String tipo;
+    private String dado;
     private int linha;
     private int coluna;
 
@@ -12,8 +14,33 @@ public class Tokens {
         this.linha = linha;
         this.coluna = coluna;
     }
+
+    public Tokens(String cadeia, String token, String tipo, String dado, int linha, int coluna) {
+        this.cadeia = cadeia;
+        this.token = token;
+        this.tipo = tipo;
+        this.dado = dado;
+        this.linha = linha;
+        this.coluna = coluna;
+    }
     
     public Tokens() {
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getDado() {
+        return dado;
+    }
+
+    public void setDado(String dado) {
+        this.dado = dado;
     }
 
     public void setCadeia(String cadeia) {

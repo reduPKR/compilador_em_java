@@ -2,7 +2,6 @@ package compiladorred;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +16,8 @@ import javafx.scene.layout.VBox;
 import model.Log;
 import model.Tokens;
 import org.fxmisc.richtext.CodeArea;
+import sintese.GerarCodigoIntermediario;
+import utils.AnaliseSemantica;
 import utils.AnaliseSintatica;
 
 import utils.CodeAreaClass;
@@ -35,7 +36,7 @@ public class MainController implements Initializable {
     @FXML
     private AnchorPane a_pane_cod;
     @FXML
-    private VBox a_pane_erro;
+    private AnchorPane a_pane_erro;
     @FXML
     private Button btn_Exemplo;
     @FXML
@@ -44,6 +45,10 @@ public class MainController implements Initializable {
     private TableColumn<Tokens, String> tc_cadeia;
     @FXML
     private TableColumn<Tokens, String> tc_token;
+    @FXML
+    private TableColumn<Tokens, String> tc_tipo;
+    @FXML
+    private TableColumn<Tokens, String> tc_info;
     
     private CodeArea code;
     private CodeArea erro;    
@@ -53,6 +58,8 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         tc_cadeia.setCellValueFactory(new PropertyValueFactory<Tokens, String>("cadeia"));
         tc_token.setCellValueFactory(new PropertyValueFactory<Tokens, String>("token"));
+        tc_tipo.setCellValueFactory(new PropertyValueFactory<Tokens, String>("tipo"));
+        tc_info.setCellValueFactory(new PropertyValueFactory<Tokens, String>("dado"));
         iniciarCodeArea();
         carregarLista();
     }
@@ -71,13 +78,26 @@ public class MainController implements Initializable {
             AnaliseSintatica.setCodigo(texto);
             AnaliseSintatica.IniciarAnalise();
             
+            AnaliseSemantica.setTabela(AnaliseSintatica.getListaVariaveis());
+            AnaliseSemantica.setLog(AnaliseSintatica.getLog());
+            AnaliseSemantica.AnalisarSemantica();
+            
             CodeAreaErro.SetLog( AnaliseSintatica.getLog());
-            
             l = CodeAreaErro.getLinhas();
-            for(Integer item: l)
+            for(Integer item: l){
                 CodeAreaClass.setErro(code, item);
-            
+            }
             carregarLista();
+            
+            if(AnaliseSemantica.getErros() == 0){
+                GerarCodigoIntermediario gci = new GerarCodigoIntermediario();
+                gci.setTabela(AnaliseSemantica.getTabela());
+                gci.Gerar();
+            }else{
+                CodeAreaErro.SetLog(new Log("Erro de compilacao", "Compilacao finalizada","Erro",0,0));
+            }
+                
+            
         }else{
             ArrayList<Log> e = new ArrayList();
             e.add(new Log("Erro sintatico", "Arquivo em branco","Erro",0,0));
@@ -104,17 +124,16 @@ public class MainController implements Initializable {
     //-------------metodos------------------------    
     public void iniciarCodeArea(){        
         code = new CodeArea();
-        erro = new CodeArea();
-        
         code = CodeAreaClass.IniciarCodeArea(code);
-        erro = CodeAreaErro.IniciarCodeArea(erro);
-   
         a_pane_cod.getChildren().add(code);
-        a_pane_erro.getChildren().add(erro);
+        
+        erro = new CodeArea();
+        erro = CodeAreaErro.IniciarCodeArea(erro);
+        a_pane_erro.getChildren().add(erro); 
     }
     
     public void carregarLista(){                
-        ObservableList<Tokens> token = AnaliseSintatica.getTabSimbolos();
+        ObservableList<Tokens> token = AnaliseSemantica.getTabSimbolos();
         if(token != null)
             tabela.setItems(token);
     }

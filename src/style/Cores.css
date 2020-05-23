@@ -88,6 +88,11 @@ and open the template in the editor.
     -fx-font-weight: bold;
 }
 
+.warning{
+    -fx-fill: #FFFF00;
+    -fx-font-weight: bold;
+}
+
 .seta{
     -fx-fill: #A9A9A9;
     -fx-font-weight: bold;
@@ -115,3 +120,4 @@ and open the template in the editor.
 .erroCorrigido{
    -fx-border-color: #363636;
 }
+

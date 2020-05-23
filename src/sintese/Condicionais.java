@@ -226,6 +226,51 @@ public class Condicionais {
         return cod;
     }
     
+    public ArrayList<String> ExcutarLoop(String linha, ArrayList<String> bloco){
+       ArrayList<String> cod = new ArrayList();
+       String reg;
+       int i, aux;
+       
+       /*Verifica se a variavel tem registrador*/
+        reg = r.getRegistrador(linha);
+        cod.add("load r0, 0");
+        if(reg == null){
+            reg = "r"+(r.getMax()+1);
+            r.Add(linha, reg);
+
+            aux = Integer.parseInt(linha);
+            if(aux < 0)
+                cod.add("load rf, "+linha);
+            else
+                cod.add("load rf, -"+linha);            
+        }else{
+            cod.add("jmpLE "+reg+" <= r0, IGNORA");
+            
+            cod.add("move r0,"+reg);
+            cod.add("load rc, -1");
+            cod.add("load rd, 1");//faz uma repeticao a menos
+            cod.add("load rf, 0");
+            cod.add("NEGAR: addi rf, rf, rc");
+            cod.add("addi r0, r0, rc");
+            cod.add("jmpLE rd <= r0, NEGAR");
+            cod.add("jmp INICIA");
+            
+            cod.add("IGNORA: move rf,"+reg);
+        }
+        
+        cod.add("INICIA: load re, 1");
+        cod.add("LOOP: jmpEQ rf = r0, FIM");
+        cod.add("jmpLE rf <= r0, BLOCO");// R0 é sempre 0 e rf vai ser sempre negativo
+        cod.add("BLOCO: "+bloco.get(0));
+        for(i = 1; i < bloco.size(); i++)
+            cod.add(bloco.get(i));
+        
+        cod.add("addi rf, rf, re");
+        cod.add("jmp LOOP");
+        cod.add("FIM: load r0, 0");
+        return cod;
+    }
+    
     public int verificaRegistradores(String r1, String []temp){
         int  aux1;
         aux1 = -1;

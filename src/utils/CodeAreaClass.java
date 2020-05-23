@@ -12,7 +12,7 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 public class CodeAreaClass {
-    private static int width = 813;
+    private static int width = 801;
     private static int height = 538;    
     private static ArrayList <String> codigo;
     private static String codOrig;

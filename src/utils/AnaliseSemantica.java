@@ -9,11 +9,16 @@ import model.Tokens;
 public class AnaliseSemantica {
     private static ArrayList <Tokens> tabela;
     private static ArrayList <Log> log;
+    private static int ctrErro;
 
     public static void setTabela(ArrayList<Tokens> tabela) {
         AnaliseSemantica.tabela = tabela;
     }
 
+    public static ArrayList<Tokens> getTabela() {
+        return tabela;
+    }
+    
     public static void setLog(ArrayList<Log> log) {
         AnaliseSemantica.log = log;
     }
@@ -71,10 +76,14 @@ public class AnaliseSemantica {
             if(i >= 1 && i < tabela.size() && tabela.get(i).getToken().contains("tk_oper_atrib")){
                 if(tabela.get(i-1).getTipo() != null){                    
                     if(!tabela.get(i+1).getToken().contains(tabela.get(i-1).getTipo())){
-                        if(tabela.get(i-1).getTipo().equals("double") && tabela.get(i+1).getToken().equals("tk_num_int"))
-                            erro.add(new Log("Alerta semantico", " double recebendo int", "Alerta",tabela.get(i).getLinha()+1,1));
-                        else
-                            erro.add(new Log("Erro semantico", " variavel atribuicao em tipos incompativeis", "Erro",tabela.get(i).getLinha()+1,1));
+                        if(!tabela.get(i+1).getTipo().equals(tabela.get(i-1).getTipo())){
+                            if(!tabela.get(i+1).getToken().equals("tk_abre_par")){
+                                if(tabela.get(i-1).getTipo().equals("double") && tabela.get(i+1).getToken().equals("tk_num_int"))
+                                    erro.add(new Log("Alerta semantico", " double recebendo int", "Alerta",tabela.get(i).getLinha()+1,1));
+                                else
+                                    erro.add(new Log("Erro semantico", " variavel atribuicao em tipos incompativeis", "Erro",tabela.get(i).getLinha()+1,1));
+                            }
+                        }
                     }
                 }
             }
@@ -97,5 +106,17 @@ public class AnaliseSemantica {
                 log.remove(ctr+1);
             }
         }
+    }
+    
+    public static int getErros(){
+        ctrErro = 0;
+        
+        for(Log item: log){
+            if(item.getTipo().equals("Erro")){
+                ctrErro++;
+            }
+        }
+        
+        return ctrErro;
     }
 }

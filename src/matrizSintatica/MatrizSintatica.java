@@ -42,7 +42,7 @@ public class MatrizSintatica {
         }   
     }
     
-    private void IniciarRegra(){
+    public void IniciarRegra(){
         regra = new ArrayList();
         No no;
         

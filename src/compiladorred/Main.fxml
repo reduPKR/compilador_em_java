@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1220.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="compiladorred.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1270.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="compiladorred.MainController">
    <top>
       <HBox prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: #4c4c4c;" BorderPane.alignment="CENTER">
          <children>
@@ -37,12 +37,12 @@
             <Separator layoutX="10.0" layoutY="550.0" prefHeight="7.0" style="-fx-background-color: #808080;" />
             <AnchorPane fx:id="a_pane_cod" prefHeight="540.0" />
             <Separator prefHeight="7.0" style="-fx-background-color: #808080;" />
-            <VBox fx:id="a_pane_erro" style="-fx-background-color: #000000;">
+            <VBox style="-fx-background-color: #000000;">
                <children>
                   <Separator prefHeight="7.0" style="-fx-background-color: #808080;" />
                </children>
             </VBox>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane fx:id="a_pane_erro" prefHeight="200.0" />
             <Separator layoutX="10.0" layoutY="764.0" prefHeight="7.0" style="-fx-background-color: #808080;" />
          </children>
       </VBox>
@@ -54,10 +54,12 @@
       <HBox prefHeight="100.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <children>
             <Separator layoutX="204.0" layoutY="10.0" orientation="VERTICAL" prefWidth="7.0" style="-fx-background-color: #808080;" />
-            <TableView fx:id="tabela" prefHeight="200.0" prefWidth="388.0">
+            <TableView fx:id="tabela" minWidth="450.0" prefHeight="200.0">
               <columns>
-                <TableColumn fx:id="tc_cadeia" prefWidth="193.0" resizable="false" sortable="false" text="Cadeia" />
-                <TableColumn fx:id="tc_token" prefWidth="193.0" resizable="false" sortable="false" text="Token" />
+                <TableColumn fx:id="tc_cadeia" prefWidth="150.0" resizable="false" sortable="false" text="Cadeia" />
+                <TableColumn fx:id="tc_tipo" prefWidth="100.0" resizable="false" sortable="false" text="Tipo" />
+                  <TableColumn fx:id="tc_token" prefWidth="100.0" resizable="false" sortable="false" text="Token" />
+                  <TableColumn fx:id="tc_info" prefWidth="100.0" resizable="false" sortable="false" text="Dado" />
               </columns>
             </TableView>
             <Separator orientation="VERTICAL" prefWidth="7.0" style="-fx-background-color: #808080;" />
