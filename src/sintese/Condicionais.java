@@ -38,7 +38,8 @@ public class Condicionais {
             
             for(i = 0; i < bloco.size(); i++)
                 cod.add(bloco.get(i));
-        }else{
+        }else
+        if(!VerificaAndOr(linha)){
             ctr = 0;
             
             if(linha.get(1).equals("==") || linha.get(1).equals("!=") || linha.get(1).equals(">") || linha.get(1).equals(">=")){
@@ -112,6 +113,109 @@ public class Condicionais {
             }
             
             
+            cod.add("BLOCO: "+bloco.get(0));
+            for(i = 1; i < bloco.size(); i++)
+                cod.add(bloco.get(i));
+        }else{
+            ctr = 0;
+            int pos;
+            
+            for(int j = 0; j < 2; j++){
+                if(j == 0){
+                    pos = 1;
+                }
+                else{
+                    pos = 5;
+                }
+                if(linha.get(pos).equals("==") || linha.get(pos).equals("!=") || linha.get(pos).equals(">") || linha.get(pos).equals(">=")){
+                    rv1 = r.getRegistrador(linha.get(pos-1));
+                    rv2 = r.getRegistrador(linha.get(pos+1));
+                    r1 = verificaRegistradores(linha.get(pos-1),temp);
+                    r2 = verificaRegistradores(linha.get(pos+1),temp);
+
+                    if(r1 == -1){//Nenhum registrador
+                        if(j == 0){
+                            if(rv1 == null)
+                                cod.add("load r0, "+linha.get(pos-1));//Carrega val no registrador t1
+                            else
+                                cod.add("move r0, "+rv1);
+                        }else{
+                            if(rv1 == null)
+                                cod.add("PT2: load r0, "+linha.get(pos-1));//Carrega val no registrador t1
+                            else
+                                cod.add("PT2: move r0, "+rv1);
+                        }
+                    }
+
+                    if(r2 == -1){//Nenhum registrador
+                        if(rv2 == null)
+                            cod.add("load "+temp[ctr++]+", "+linha.get(pos+1));//Carrega val no registrador t1
+                        else
+                            cod.add("move "+temp[ctr++]+", "+rv2);
+                        rv2 = temp[ctr-1];
+                    }
+
+                    if(linha.get(pos).equals(">")){
+                        cod.add("load "+temp[ctr]+", -1");
+                        cod.add("addi r0, r0,"+temp[ctr]);
+                   }
+
+                    if(linha.get(pos).equals("==")){
+                        cod.add("jmpEQ "+rv2+"=r0, CTR"+(j+1));
+                        cod.add("jmp FIM");
+                    }else
+                    if(linha.get(pos).equals("!=")){
+                        cod.add("jmpEQ "+rv2+"=r0, FIM");
+                    }else
+                    if(linha.get(pos).equals(">=") || linha.get(pos).equals(">")){
+                        cod.add("jmpLE "+rv2+"<=r0, CTR"+(j+1));
+                        cod.add("jmp FIM");
+                }
+                }else{
+                    if(linha.get(pos).equals("<=") || linha.get(pos).equals("<")){
+                        rv1 = r.getRegistrador(linha.get(pos+1));
+                        rv2 = r.getRegistrador(linha.get(pos-1));
+                        r1 = verificaRegistradores(linha.get(pos+1),temp);
+                        r2 = verificaRegistradores(linha.get(pos-1),temp);
+
+                        if(r1 == -1){//Nenhum registrador
+                            if(j == 0){
+                                if(rv1 == null)
+                                    cod.add("load r0, "+linha.get(pos+1));//Carrega val no registrador t1
+                                else
+                                    cod.add("move r0, "+rv1);
+                            }else{
+                                if(rv1 == null)
+                                    cod.add("PT2: load r0, "+linha.get(pos+1));//Carrega val no registrador t1
+                                else
+                                    cod.add("PT2: move r0, "+rv1);
+                            }
+                        }
+
+                        if(r2 == -1){//Nenhum registrador
+                            if(rv2 == null)
+                                cod.add("load "+temp[ctr++]+", "+linha.get(pos-1));//Carrega val no registrador t1
+                            else{
+                                cod.add("move "+temp[ctr++]+", "+rv2);
+                            }
+                            rv2 = temp[ctr-1];
+                        }
+
+                        if(linha.get(1).equals("<")){
+                             cod.add("load "+temp[ctr]+", 1");
+                             cod.add("addi "+temp[ctr-1]+","+temp[ctr-1]+","+temp[ctr]);
+                        }
+
+                        cod.add("jmpLE "+rv2+"<=r0, CTR"+(j+1));
+                        cod.add("jmp FIM");
+                    }
+                }
+            }            
+            
+            cod.add("CTR1: load r7, 1");
+            cod.add("jmp PT2");
+            cod.add("CTR2: load r0, 1");
+            //cod.add("jmpEQ r7=r0,BLOCO");
             cod.add("BLOCO: "+bloco.get(0));
             for(i = 1; i < bloco.size(); i++)
                 cod.add(bloco.get(i));
@@ -282,4 +386,12 @@ public class Condicionais {
         return aux1;
     }
     
+    private Boolean VerificaAndOr(ArrayList<String> linha){
+        Boolean aux = false;
+        for(int i = 0; i < linha.size(); i++){
+            if(linha.get(i).equals("&&") || linha.get(i).equals("||"))
+                aux = true;
+        }
+        return aux;
+    }
 }
