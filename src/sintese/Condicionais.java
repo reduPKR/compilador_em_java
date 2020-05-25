@@ -215,9 +215,14 @@ public class Condicionais {
             cod.add("CTR1: load r7, 1");
             cod.add("jmp PT2");
             cod.add("CTR2: load r0, 1");
-            //cod.add("jmpEQ r7=r0,BLOCO");
-            cod.add("BLOCO: "+bloco.get(0));
-            for(i = 1; i < bloco.size(); i++)
+            
+            if(linha.get(3).equals("&&"))
+                cod.add("and r7, r7, r0");
+            else
+                cod.add("or r7, r7, r0");
+            
+            cod.add("jmpEQ r7=r0,BLOCO");
+            for(i = 0; i < bloco.size(); i++)
                 cod.add(bloco.get(i));
         }
         
@@ -246,7 +251,8 @@ public class Condicionais {
             cod.add("WHILE: jmpEQ "+reg+" = r0, FIM");
             for(i = 0; i < bloco.size(); i++)
                 cod.add(bloco.get(i));
-        }else{
+        }else
+        if(!VerificaAndOr(linha)){
             ctr = 0;
             
             if(linha.get(1).equals("==") || linha.get(1).equals("!=") || linha.get(1).equals(">") || linha.get(1).equals(">=")){
@@ -281,6 +287,7 @@ public class Condicionais {
                 }else
                 if(linha.get(1).equals("!=")){
                     cod.add("jmpEQ "+rv2+"=r0, FIM");
+                    cod.add("jmp WHILE");
                 }else
                 if(linha.get(1).equals(">=") || linha.get(1).equals(">")){
                     cod.add("jmpLE "+rv2+"<=r0, BLOCO");
@@ -319,6 +326,126 @@ public class Condicionais {
                 }
             }
             
+            
+            cod.add("BLOCO: "+bloco.get(0));
+            for(i = 1; i < bloco.size(); i++)
+                cod.add(bloco.get(i));
+        }else{
+            ctr = 0;
+            int pos;
+            
+            /*Quando coloquei em outro lugar ficou travando*/
+            if(VerificaAndOr(linha)){
+                cod.add("CTR1: load r7, 1");
+                cod.add("jmp PT2");
+                cod.add("CTR2: load r8, 1");
+                cod.add("load r0,1");
+
+                if(linha.get(3).equals("&&"))
+                    cod.add("and r7, r7, r8");
+                else
+                    cod.add("or r7, r7, r8");
+
+                cod.add("jmpEQ r7=r0, BLOCO");
+                cod.add("jmp FIM");
+            }
+            /*Valores que vao ficar fixos*/
+            cod.add("load r7, 7");
+            cod.add("load r8, 8");
+            
+            for(int j = 0; j < 2; j++){
+                if(j == 0){
+                    pos = 1;
+                }
+                else{
+                    pos = 5;
+                }
+                
+                if(linha.get(pos).equals("==") || linha.get(pos).equals("!=") || linha.get(pos).equals(">") || linha.get(pos).equals(">=")){
+                    rv1 = r.getRegistrador(linha.get(pos-1));
+                    rv2 = r.getRegistrador(linha.get(pos+1));
+                    r1 = verificaRegistradores(linha.get(pos-1),temp);
+                    r2 = verificaRegistradores(linha.get(pos+1),temp);
+                    
+                    if(r1 == -1){//Nenhum registrador
+                        if(j == 0){
+                            if(rv1 == null)
+                                cod.add("WHILE: load r0, "+linha.get(pos-1));//Carrega val no registrador t1
+                            else
+                                cod.add("WHILE: move r0, "+rv1);
+                        }else{
+                            if(rv1 == null)
+                                cod.add("PT2: load r0, "+linha.get(pos-1));//Carrega val no registrador t1
+                            else
+                                cod.add("PT2: move r0, "+rv1);
+                        }
+
+                        if(linha.get(pos).equals(">")){
+                            cod.add("load ra, -1");
+                            cod.add("addi r0, r0, ra");
+                        }
+                    }
+
+                    if(r2 == -1){//Nenhum registrador
+                        if(rv2 == null)
+                            cod.add("load "+temp[ctr++]+", "+linha.get(pos+1));//Carrega val no registrador t1
+                        else
+                            cod.add("move "+temp[ctr++]+", "+rv2);
+                        rv2 = temp[ctr-1];
+                    }
+                    
+                    if(linha.get(pos).equals("==")){
+                        cod.add("jmpEQ "+rv2+"=r0, CTR"+(j+1));
+                        cod.add("jmp FIM");
+                    }else
+                    if(linha.get(pos).equals("!=")){
+                        cod.add("jmpEQ "+rv2+"=r0, FIM");
+                        cod.add("jmp WHILE");
+                    }else
+                    if(linha.get(pos).equals(">=") || linha.get(pos).equals(">")){
+                        cod.add("jmpLE "+rv2+"<=r0, CTR"+(j+1));
+                        cod.add("jmp FIM");
+                    }
+                }else{
+                    if(linha.get(pos).equals("<=") || linha.get(pos).equals("<")){
+                        rv1 = r.getRegistrador(linha.get(pos+1));
+                        rv2 = r.getRegistrador(linha.get(pos-1));
+                        r1 = verificaRegistradores(linha.get(pos+1),temp);
+                        r2 = verificaRegistradores(linha.get(pos-1),temp);
+
+                        if(r1 == -1){//Nenhum registrador
+                            if(j == 0){
+                                if(rv1 == null)
+                                    cod.add("WHILE: load r0, "+linha.get(pos-1));//Carrega val no registrador t1
+                                else
+                                    cod.add("WHILE: move r0, "+rv1);
+                            }else{
+                                if(rv1 == null)
+                                    cod.add("PT2: load r0, "+linha.get(pos-1));//Carrega val no registrador t1
+                                else
+                                    cod.add("PT2: move r0, "+rv1);
+                            }
+                            
+                            if(linha.get(pos).equals("<")){
+                                cod.add("load ra, -1");
+                                cod.add("addi r0, r0, ra");
+                            }
+                        }
+
+                        if(r2 == -1){//Nenhum registrador
+                            if(rv2 == null)
+                                cod.add("load "+temp[ctr++]+", "+linha.get(pos-1));
+                            else{
+                                cod.add("move "+temp[ctr++]+", "+rv2);
+                            }
+                            rv2 = temp[ctr-1];
+                        }
+
+                        cod.add("jmpLE "+rv2+"<=r0, CTR"+(j+1));
+                        cod.add("jmp FIM");
+                    }
+                }
+            }
             
             cod.add("BLOCO: "+bloco.get(0));
             for(i = 1; i < bloco.size(); i++)
