@@ -74,12 +74,15 @@ public class AnaliseSemantica {
      private static void setErrosAtribuicao(ArrayList<Log> erro){
         for (int i = 0; i < tabela.size(); i++) {
             if(i >= 1 && i < tabela.size() && tabela.get(i).getToken().contains("tk_oper_atrib")){
-                if(tabela.get(i-1).getTipo() != null){                    
+                if(tabela.get(i-1).getTipo() != null && tabela.get(i+1).getTipo() != null){                    
                     if(!tabela.get(i+1).getToken().contains(tabela.get(i-1).getTipo())){
                         if(!tabela.get(i+1).getTipo().equals(tabela.get(i-1).getTipo())){
                             if(!tabela.get(i+1).getToken().equals("tk_abre_par")){
-                                if(tabela.get(i-1).getTipo().equals("double") && tabela.get(i+1).getToken().equals("tk_num_int"))
+                                if(tabela.get(i-1).getTipo().equals("double") && tabela.get(i+1).getToken().equals("tk_num_int") || tabela.get(i-1).getTipo().equals("double") && tabela.get(i+1).getTipo().equals("int") )
                                     erro.add(new Log("Alerta semantico", " double recebendo int", "Alerta",tabela.get(i).getLinha()+1,1));
+                                else
+                                if(tabela.get(i-1).getTipo().equals("int") && tabela.get(i+1).getToken().equals("tk_num_double") || tabela.get(i-1).getTipo().equals("int") && tabela.get(i+1).getTipo().equals("double") )
+                                    erro.add(new Log("Alerta semantico", " int recebendo double", "Alerta",tabela.get(i).getLinha()+1,1));
                                 else
                                     erro.add(new Log("Erro semantico", " variavel atribuicao em tipos incompativeis", "Erro",tabela.get(i).getLinha()+1,1));
                             }
