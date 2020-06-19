@@ -37,6 +37,7 @@ public class GerarCodigoIntermediario {
         ArrayList<Tokens> bloco;
         ArrayList<String> cod;
         String salvar = "";
+        String token;
         
         for(i = 0; i < tabela.size(); i++){
             if(tabela.get(i).getToken().equals("tk_oper_atrib")){
@@ -57,6 +58,7 @@ public class GerarCodigoIntermediario {
             if(tabela.get(i).getToken().equals("tk_bloco_if") || tabela.get(i).getToken().equals("tk_bloco_while") || tabela.get(i).getToken().equals("tk_bloco_loop")){
                 linha = new ArrayList();
                 bloco = new ArrayList();
+                token = tabela.get(i).getToken();
                 
                 i+=2;//pula para os dados
                 for(; i < tabela.size() && !tabela.get(i).getToken().equals("tk_fecha_par"); i++){
@@ -66,7 +68,7 @@ public class GerarCodigoIntermediario {
                 while(tabela.get(i).getToken().equals("tk_fecha_par") || tabela.get(i).getToken().equals("tk_abre_chav") || tabela.get(i).getToken().equals("\n"))
                     i++;
                 
-                for(; i < tabela.size() && !tabela.get(i).getToken().equals("tk_fim_lin"); i++){
+                for(; i < tabela.size() && !tabela.get(i).getToken().equals("tk_fecha_chav"); i++){
                     bloco.add(new Tokens(tabela.get(i).getCadeia(),tabela.get(i).getToken(), tabela.get(i).getTipo(), tabela.get(i).getDado() , 0, 0));
                 }                
                 
@@ -74,10 +76,10 @@ public class GerarCodigoIntermediario {
                 aux = Converter(Construir(bloco, r));
                 
                 con.setR(r);
-                if(tabela.get(i).getToken().equals("tk_bloco_if"))
+                if(token.equals("tk_bloco_if"))
                     cod = con.ExcutarIf(linha, aux);
                 else
-                if(tabela.get(i).getToken().equals("tk_bloco_while"))
+                if(token.equals("tk_bloco_while"))
                     cod = con.ExcutarWhile(linha, aux);
                 else{
                     //loop só aceita 1 dado seja variavel ou inteiro
